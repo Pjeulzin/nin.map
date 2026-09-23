@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Pins — Nin.Map</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="admin-body" style="display:flex; flex-direction:column;">
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__logo">🗺️</span>
+      <span class="topbar__title">Nin<span class="accent">.Map</span></span>
+    </div>
+    <nav class="topbar__nav">
+      <a href="pins.html" class="topbar__link topbar__link--active">Pins</a>
+      <a href="missions.html" class="topbar__link">Missões</a>
+      <a href="../index.html" class="topbar__link">Ver mapa</a>
+    </nav>
+    <div class="topbar__actions">
+      <label for="arco-select" class="visually-hidden">Arco</label>
+      <select id="arco-select" class="select"></select>
+      <button id="btn-logout" class="btn">Sair</button>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <div id="map"></div>
+
+    <aside class="admin-sidebar">
+      <h2 id="form-title">Novo pin</h2>
+      <p class="help-text">Clique no mapa pra definir a posição (X/Y é preenchido sozinho).</p>
+
+      <form id="pin-form">
+        <input type="hidden" id="pin-id" />
+
+        <div class="form-field">
+          <label for="pin-name">Nome</label>
+          <input type="text" id="pin-name" required />
+        </div>
+
+        <div class="form-field">
+          <label for="pin-type">Tipo</label>
+          <select id="pin-type">
+            <option value="cidade">Cidade</option>
+            <option value="dungeon">Dungeon</option>
+            <option value="npc">NPC</option>
+            <option value="recurso">Recurso</option>
+            <option value="outro" selected>Outro</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="pin-x">X</label>
+            <input type="number" id="pin-x" step="any" required />
+          </div>
+          <div class="form-field">
+            <label for="pin-y">Y</label>
+            <input type="number" id="pin-y" step="any" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="pin-description">Descrição</label>
+          <textarea id="pin-description"></textarea>
+        </div>
+
+        <p id="pin-error" class="error-text"></p>
+
+        <div style="display:flex; gap:8px;">
+          <button type="submit" class="btn-primary">Salvar</button>
+          <button type="button" id="btn-cancel-edit" class="btn" style="display:none;">Cancelar edição</button>
+        </div>
+      </form>
+
+      <hr />
+
+      <h2>Pins do arco</h2>
+      <div id="pins-status" class="status-message"></div>
+      <table class="admin-table" id="pins-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="pins-tbody"></tbody>
+      </table>
+    </aside>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script type="module" src="js/pins-admin.js"></script>
+</body>
+</html>

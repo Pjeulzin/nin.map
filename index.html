@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nin.Map — Mapa do Nin Online</title>
+  <meta name="description" content="Mapa interativo do mundo de Nin Online, feito com Leaflet." />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__logo">🗺️</span>
+      <span class="topbar__title">Nin<span class="accent">.Map</span></span>
+    </div>
+    <nav class="topbar__nav">
+      <a href="index.html" class="topbar__link topbar__link--active">Mapa</a>
+      <a href="missions.html" class="topbar__link">Missões</a>
+      <a href="admin/index.html" class="topbar__link">Admin</a>
+    </nav>
+    <div class="topbar__actions">
+      <label for="arco-select" class="visually-hidden">Selecionar arco</label>
+      <select id="arco-select" class="select" title="Selecionar arco"></select>
+      <button id="btn-reset-view" class="btn" title="Centralizar mapa">Centralizar</button>
+    </div>
+  </header>
+
+  <main id="map"></main>
+
+  <footer class="footer">
+    <span>Mapas placeholder — troque as imagens em <code>assets/</code> pelas imagens reais de cada arco (veja <code>js/config.js</code>).</span>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script type="module" src="js/map.js"></script>
+</body>
+</html>

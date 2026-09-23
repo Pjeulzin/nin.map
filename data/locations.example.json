@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Vila Inicial",
+    "type": "cidade",
+    "x": 1024,
+    "y": 1024,
+    "description": "Ponto de partida dos novos jogadores."
+  }
+]

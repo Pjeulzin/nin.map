@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Missões — Nin.Map</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="admin-body" style="display:flex; flex-direction:column;">
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__logo">🗺️</span>
+      <span class="topbar__title">Nin<span class="accent">.Map</span></span>
+    </div>
+    <nav class="topbar__nav">
+      <a href="pins.html" class="topbar__link">Pins</a>
+      <a href="missions.html" class="topbar__link topbar__link--active">Missões</a>
+      <a href="../missions.html" class="topbar__link">Ver missões</a>
+    </nav>
+    <div class="topbar__actions">
+      <button id="btn-logout" class="btn">Sair</button>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <div class="admin-form-card">
+      <h2 id="form-title">Nova missão</h2>
+      <form id="mission-form">
+        <input type="hidden" id="mission-id" />
+
+        <div class="form-field">
+          <label for="mission-name">Nome da missão</label>
+          <input type="text" id="mission-name" required />
+        </div>
+
+        <div class="form-field">
+          <label for="mission-description">Descrição</label>
+          <textarea id="mission-description"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="mission-type">Tipo de missão</label>
+            <select id="mission-type">
+              <option value="global">Global</option>
+              <option value="arco">Exclusiva de arco</option>
+              <option value="evento">Evento</option>
+              <option value="diaria">Diária</option>
+            </select>
+          </div>
+          <div class="form-field" id="mission-arco-field">
+            <label for="mission-arco">Arco</label>
+            <select id="mission-arco"></select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="mission-xp">XP</label>
+            <input type="number" id="mission-xp" min="0" value="0" required />
+          </div>
+          <div class="form-field">
+            <label for="mission-ryo">Ryo</label>
+            <input type="number" id="mission-ryo" min="0" value="0" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="mission-level-mode">Nível necessário</label>
+          <select id="mission-level-mode">
+            <option value="exact">Nível exato (ex: nível 7)</option>
+            <option value="min">Mínimo (ex: +20)</option>
+            <option value="max">Até um nível (ex: até 10)</option>
+            <option value="range" selected>Intervalo (ex: 3 até 7)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-field" id="level-min-field">
+            <label for="mission-level-min">Nível mínimo</label>
+            <input type="number" id="mission-level-min" min="1" />
+          </div>
+          <div class="form-field" id="level-max-field">
+            <label for="mission-level-max">Nível máximo</label>
+            <input type="number" id="mission-level-max" min="1" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Objetivos (itens para coletar/entregar)</label>
+          <div id="objectives-list"></div>
+          <button type="button" id="btn-add-objective" class="btn btn-small" style="align-self:flex-start;">+ Adicionar item</button>
+        </div>
+
+        <p id="mission-error" class="error-text"></p>
+
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button type="submit" class="btn-primary">Salvar</button>
+          <button type="button" id="btn-cancel-edit" class="btn" style="display:none;">Cancelar edição</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="admin-table-wrap">
+      <div id="missions-status" class="status-message"></div>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Nível</th>
+            <th>XP</th>
+            <th>Ryo</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="missions-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module" src="js/missions-admin.js"></script>
+</body>
+</html>

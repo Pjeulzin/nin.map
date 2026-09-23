@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missões — Nin.Map</title>
+  <meta name="description" content="Lista de missões de Nin Online: XP, ryo, nível necessário e objetivos." />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__logo">🗺️</span>
+      <span class="topbar__title">Nin<span class="accent">.Map</span></span>
+    </div>
+    <nav class="topbar__nav">
+      <a href="index.html" class="topbar__link">Mapa</a>
+      <a href="missions.html" class="topbar__link topbar__link--active">Missões</a>
+      <a href="admin/index.html" class="topbar__link">Admin</a>
+    </nav>
+    <div class="topbar__actions">
+      <label for="filter-type" class="visually-hidden">Filtrar por tipo</label>
+      <select id="filter-type" class="select" title="Filtrar por tipo">
+        <option value="">Todos os tipos</option>
+        <option value="global">Global</option>
+        <option value="arco">Exclusiva de arco</option>
+        <option value="evento">Evento</option>
+        <option value="diaria">Diária</option>
+      </select>
+      <label for="filter-arco" class="visually-hidden">Filtrar por arco</label>
+      <select id="filter-arco" class="select" title="Filtrar por arco">
+        <option value="">Todos os arcos</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="page">
+    <div id="missions-status" class="status-message"></div>
+    <div id="missions-list" class="missions-grid"></div>
+  </main>
+
+  <script type="module" src="js/missions.js"></script>
+</body>
+</html>

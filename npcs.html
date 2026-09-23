@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nin.Map — Mapa do Nin Online</title>
-  <meta name="description" content="Mapa interativo do mundo de Nin Online, feito com Leaflet." />
+  <title>NPCs — Nin.Map</title>
+  <meta name="description" content="Lista de NPCs de Nin Online: quem vende o quê e quem concede quais missões." />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -21,7 +20,7 @@
     </div>
     <div id="panel-body" class="float-panel__body">
       <nav class="float-panel__nav">
-        <a href="index.html" class="float-panel__link float-panel__link--active">
+        <a href="index.html" class="float-panel__link">
           <span class="float-panel__icon" aria-hidden="true">🗺️</span>
           <span data-i18n="nav_map">Mapa</span>
         </a>
@@ -33,7 +32,7 @@
           <span class="float-panel__icon" aria-hidden="true">👹</span>
           <span data-i18n="nav_mobs">Mobs</span>
         </a>
-        <a href="npcs.html" class="float-panel__link">
+        <a href="npcs.html" class="float-panel__link float-panel__link--active">
           <span class="float-panel__icon" aria-hidden="true">🧙</span>
           <span data-i18n="nav_npcs">NPCs</span>
         </a>
@@ -62,13 +61,17 @@
       <div class="float-panel__divider"></div>
 
       <div class="float-panel__filters">
-        <label for="village-select" class="visually-hidden">Selecionar vila</label>
-        <select id="village-select" class="select" title="Selecionar vila">
-          <option value="" data-i18n="village_placeholder">Sua vila...</option>
+        <label for="filter-arco" class="visually-hidden">Filtrar por arco</label>
+        <select id="filter-arco" class="select" title="Filtrar por arco">
+          <option value="" data-i18n="filter_all_arcos">Todos os arcos</option>
         </select>
-        <label for="arco-select" class="visually-hidden">Selecionar arco</label>
-        <select id="arco-select" class="select" title="Selecionar arco"></select>
-        <button id="btn-reset-view" class="btn" data-i18n="btn_center" title="Centralizar mapa">Centralizar</button>
+        <label for="filter-role" class="visually-hidden">Filtrar por papel</label>
+        <select id="filter-role" class="select" title="Filtrar por papel">
+          <option value="" data-i18n="filter_all_roles">Todos os papéis</option>
+          <option value="vendedor" data-i18n="npc_role_vendedor">Vendedor</option>
+          <option value="concede_missao" data-i18n="npc_role_concede_missao">Concede missão</option>
+          <option value="parte_missao" data-i18n="npc_role_parte_missao">Parte de missão</option>
+        </select>
       </div>
 
       <div class="float-panel__divider"></div>
@@ -81,10 +84,12 @@
     </div>
   </div>
 
-  <main id="map"></main>
+  <main class="page">
+    <div id="npcs-status" class="status-message"></div>
+    <div id="npcs-list" class="missions-grid"></div>
+  </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script type="module" src="js/nav.js"></script>
-  <script type="module" src="js/map.js"></script>
+  <script type="module" src="js/npcs.js"></script>
 </body>
 </html>

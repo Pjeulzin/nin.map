@@ -20,11 +20,6 @@ html, body {
   font-family: "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-}
-
 .topbar {
   display: flex;
   align-items: center;
@@ -85,6 +80,190 @@ body {
   gap: 8px;
 }
 
+/* ---------------------------------------------------------------
+   Painel flutuante — usado no lugar da barra superior/inferior em
+   todas as páginas públicas (Mapa, Missões, Mobs, NPCs, Itens).
+   Arrastável (pega pelo cabeçalho) e minimizável. Posição e estado
+   ficam salvos no navegador, então persistem ao trocar de página.
+   --------------------------------------------------------------- */
+.float-panel {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 2000;
+  width: 250px;
+  max-width: calc(100vw - 24px);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.float-panel--dragging {
+  opacity: 0.92;
+}
+
+.float-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 10px 12px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.float-panel--dragging .float-panel__header {
+  cursor: grabbing;
+}
+
+.float-panel__drag-icon {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.float-panel__brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.float-panel__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.float-panel__toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.float-panel__toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.float-panel__body {
+  padding: 10px;
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+}
+
+.float-panel[data-minimized="true"] {
+  width: auto;
+}
+
+.float-panel[data-minimized="true"] .float-panel__body {
+  display: none;
+}
+
+.float-panel__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.float-panel__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.float-panel__link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.float-panel__link--active {
+  color: var(--accent);
+  background: rgba(111, 191, 115, 0.12);
+  font-weight: 600;
+}
+
+.float-panel__icon {
+  font-size: 1.05rem;
+  width: 1.3em;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.float-panel__divider {
+  height: 1px;
+  background: var(--border);
+  margin: 10px 0;
+}
+
+.float-panel__section-title {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+}
+
+.float-panel__controls,
+.float-panel__filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.float-panel__controls .select,
+.float-panel__filters .select,
+.float-panel__controls .btn,
+.float-panel__filters .btn {
+  width: 100%;
+}
+
+.float-panel__admin-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.float-panel__admin-link:hover {
+  color: var(--accent);
+}
+
+.float-panel__credit {
+  margin: 8px 2px 0;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.float-panel__credit strong {
+  color: var(--accent);
+}
+
 .btn,
 .select {
   background: var(--bg);
@@ -106,6 +285,48 @@ body {
   appearance: auto;
 }
 
+input.select {
+  cursor: text;
+  min-width: 180px;
+}
+
+/* "Slot" de ícone de item, no estilo inventário de jogo: fundo em
+   degradê marrom/bege, borda mais escura e cantos arredondados. */
+.item-icon-frame {
+  --slot-size: 40px;
+  width: var(--slot-size);
+  height: var(--slot-size);
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: linear-gradient(160deg, #d8b88a, #b98f5e);
+  border: 2px solid #7a5a37;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18), inset 0 2px 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.item-icon-frame--lg {
+  --slot-size: 64px;
+  border-radius: 10px;
+}
+
+.item-icon-frame img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.item-icon-frame__empty {
+  font-size: 0.6rem;
+  color: rgba(0, 0, 0, 0.55);
+  text-align: center;
+  line-height: 1.1;
+  padding: 2px;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -118,35 +339,20 @@ body {
   border: 0;
 }
 
+/* O mapa (index.html) não tem mais topbar acima dele — ocupa a tela
+   inteira, com o painel flutuante por cima. */
 #map {
-  flex: 1;
-  width: 100%;
+  position: fixed;
+  inset: 0;
   background: #0e1012;
 }
 
-.footer {
-  padding: 6px 16px;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  background: var(--panel);
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-
-.footer code {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 1px 5px;
-  border-radius: 4px;
-}
-
-/* Páginas de conteúdo (missões, admin) */
+/* Páginas de conteúdo (missões, mobs, npcs, itens) */
 .page {
-  flex: 1;
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
   padding: 20px 16px 40px;
-  overflow-y: auto;
 }
 
 .status-message {
@@ -177,9 +383,31 @@ body {
   gap: 4px;
 }
 
+.mission-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .mission-card__title {
   margin: 0;
   font-size: 1.05rem;
+}
+
+.mission-card__rank {
+  --rank-color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--rank-color);
+  border: 1.5px solid var(--rank-color);
+  background: color-mix(in srgb, var(--rank-color) 15%, transparent);
 }
 
 .mission-card__tag {
@@ -227,6 +455,174 @@ body {
   color: var(--text);
   border-top: 1px solid var(--border);
   padding-top: 8px;
+}
+
+.mission-card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.mission-card__link:hover .mission-card__title {
+  color: var(--accent);
+}
+
+/* Páginas de detalhe (mob-detail.html, npc-detail.html,
+   mastery-detail.html) — estilo "ficha" no espírito do
+   ninonline.fandom.com/wiki, reaproveitando as variáveis do tema. */
+.detail-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+}
+
+.detail-back-link:hover {
+  color: var(--accent);
+}
+
+.detail-hero {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.detail-hero__icon {
+  --slot-size: 84px;
+}
+
+.detail-hero__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.detail-hero__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.detail-hero__title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.detail-hero__tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.detail-hero__location {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.detail-section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.detail-section h2 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-section p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.detail-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px;
+}
+
+.detail-stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detail-stats dt {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-stats dd {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.detail-ability-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-ability-list li {
+  font-size: 0.88rem;
+  padding: 6px 10px;
+  background: rgba(111, 191, 115, 0.08);
+  border: 1px solid rgba(111, 191, 115, 0.25);
+  border-radius: 6px;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.detail-table th,
+.detail-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.detail-empty {
+  color: var(--text-muted);
+  font-size: 0.88rem;
 }
 
 /* Admin — login */
@@ -419,6 +815,318 @@ body {
 }
 
 .objective-row input {
+  flex: 1;
+}
+
+/* Build calculator (builds.html) */
+.build-page {
+  max-width: 1280px;
+}
+
+.build-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .build-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.build-section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.build-section h2 {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.build-section h2 .build-section__bar {
+  width: 4px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.build-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.build-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 560px) {
+  .build-grid-2,
+  .build-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.build-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.build-stat-row:last-child {
+  border-bottom: none;
+}
+
+.build-stat-row__label {
+  flex: 1;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.build-stat-row__value {
+  width: 34px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.build-stat-row button {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.build-stat-row button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.build-stat-row button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.build-points-left {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.build-vitals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.build-vitals__box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.build-vitals__box strong {
+  display: block;
+  font-size: 1.3rem;
+}
+
+.build-vitals__box span {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.build-rings {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.build-ring {
+  flex: 1;
+  min-width: 220px;
+}
+
+.build-ring h3 {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.build-ring-slot {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.build-ring-slot select {
+  flex: 1.3;
+}
+
+.build-ring-slot input {
+  flex: 1;
+  min-width: 0;
+}
+
+.build-jutsu-mastery-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.build-jutsu-tab {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.build-jutsu-tab--active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(111, 191, 115, 0.12);
+}
+
+.build-jutsu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.build-jutsu-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+}
+
+.build-jutsu-card--locked {
+  opacity: 0.55;
+}
+
+.build-jutsu-card__name {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.build-jutsu-card__meta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.build-jutsu-card__dmg {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.build-jutsu-card__lock {
+  margin-top: 6px;
+  font-size: 0.7rem;
+  color: #e5a473;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.build-summary {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  position: sticky;
+  top: 16px;
+}
+
+.build-summary__row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.build-summary__row:last-child {
+  border-bottom: none;
+}
+
+.build-summary__row dt {
+  color: var(--text-muted);
+}
+
+.build-summary__row dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.build-summary__weapon-buffs {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.build-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.build-saved-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.build-saved-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.build-share-box {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.build-share-box input {
   flex: 1;
 }
 

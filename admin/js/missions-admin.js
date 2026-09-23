@@ -1,4 +1,4 @@
-import { ARCOS } from "../../js/config.js";
+import { ARCOS, VILLAGES } from "../../js/config.js";
 import { supabase } from "../../js/supabaseClient.js";
 import { requireAuth, wireLogoutButton } from "./auth.js";
 import { MISSION_TYPE_LABELS, formatLevelRequirement, formatObjectives } from "../../js/missions-shared.js";
@@ -14,6 +14,9 @@ const descInput = document.getElementById("mission-description");
 const typeInput = document.getElementById("mission-type");
 const arcoField = document.getElementById("mission-arco-field");
 const arcoInput = document.getElementById("mission-arco");
+const rankInput = document.getElementById("mission-rank");
+const villageInput = document.getElementById("mission-village");
+const npcInput = document.getElementById("mission-npc");
 const xpInput = document.getElementById("mission-xp");
 const ryoInput = document.getElementById("mission-ryo");
 const levelModeInput = document.getElementById("mission-level-mode");
@@ -25,6 +28,7 @@ const objectivesList = document.getElementById("objectives-list");
 const addObjectiveBtn = document.getElementById("btn-add-objective");
 const errorEl = document.getElementById("mission-error");
 const cancelBtn = document.getElementById("btn-cancel-edit");
+const duplicateBtn = document.getElementById("btn-duplicate");
 const statusEl = document.getElementById("missions-status");
 const tbody = document.getElementById("missions-tbody");
 
@@ -36,6 +40,43 @@ function populateArcoSelect() {
     option.textContent = arco.label;
     arcoInput.appendChild(option);
   });
+}
+
+function populateVillageSelect() {
+  VILLAGES.forEach((village) => {
+    const option = document.createElement("option");
+    option.value = village.id;
+    option.textContent = village.label;
+    villageInput.appendChild(option);
+  });
+}
+
+function villageLabel(villageId) {
+  const village = VILLAGES.find((v) => v.id === villageId);
+  return village ? village.label : villageId;
+}
+
+let allNpcs = [];
+
+async function loadNpcOptions() {
+  const { data, error } = await supabase.from("npcs").select("id, name").order("name");
+  if (error) {
+    console.error("Erro ao carregar NPCs:", error.message);
+    return;
+  }
+  allNpcs = data || [];
+  npcInput.innerHTML = '<option value="">— Não definido —</option>';
+  allNpcs.forEach((npc) => {
+    const option = document.createElement("option");
+    option.value = npc.id;
+    option.textContent = npc.name;
+    npcInput.appendChild(option);
+  });
+}
+
+function npcLabel(npcId) {
+  const npc = allNpcs.find((n) => n.id === npcId);
+  return npc ? npc.name : null;
 }
 
 function updateArcoFieldVisibility() {
@@ -79,6 +120,9 @@ function resetForm() {
   nameInput.value = "";
   descInput.value = "";
   typeInput.value = "global";
+  rankInput.value = "D";
+  villageInput.value = "";
+  npcInput.value = "";
   xpInput.value = 0;
   ryoInput.value = 0;
   levelModeInput.value = "range";
@@ -89,6 +133,7 @@ function resetForm() {
   errorEl.textContent = "";
   formTitle.textContent = "Nova missão";
   cancelBtn.style.display = "none";
+  duplicateBtn.style.display = "none";
   updateArcoFieldVisibility();
   updateLevelFieldsVisibility();
 }
@@ -110,6 +155,9 @@ function fillFormForEdit(m) {
   descInput.value = m.description || "";
   typeInput.value = m.mission_type;
   if (m.mission_type === "arco" && m.arco_id) arcoInput.value = m.arco_id;
+  rankInput.value = m.rank || "D";
+  villageInput.value = m.village_id || "";
+  npcInput.value = m.giver_npc_id || "";
   xpInput.value = m.xp ?? 0;
   ryoInput.value = m.ryo ?? 0;
 
@@ -124,9 +172,51 @@ function fillFormForEdit(m) {
 
   formTitle.textContent = `Editando: ${m.name}`;
   cancelBtn.style.display = "inline-block";
+  duplicateBtn.style.display = "inline-block";
   updateArcoFieldVisibility();
   updateLevelFieldsVisibility();
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function buildPayloadFromForm() {
+  const mode = levelModeInput.value;
+  const minVal = levelMinInput.value === "" ? null : Number(levelMinInput.value);
+  const maxVal = levelMaxInput.value === "" ? null : Number(levelMaxInput.value);
+
+  let level_min = null;
+  let level_max = null;
+  if (mode === "exact") {
+    level_min = minVal;
+    level_max = minVal;
+  } else if (mode === "min") {
+    level_min = minVal;
+  } else if (mode === "max") {
+    level_max = maxVal;
+  } else if (mode === "range") {
+    level_min = minVal;
+    level_max = maxVal;
+  }
+
+  return {
+    name: nameInput.value.trim(),
+    description: descInput.value.trim() || null,
+    mission_type: typeInput.value,
+    arco_id: typeInput.value === "arco" ? arcoInput.value : null,
+    rank: rankInput.value,
+    village_id: villageInput.value || null,
+    giver_npc_id: npcInput.value || null,
+    xp: Number(xpInput.value) || 0,
+    ryo: Number(ryoInput.value) || 0,
+    level_min,
+    level_max,
+    objectives: getObjectivesFromForm(),
+  };
+}
+
+function validatePayload(payload) {
+  if (!payload.name) return "Informe o nome da missão.";
+  if (payload.mission_type === "arco" && !payload.arco_id) return "Selecione o arco dessa missão.";
+  return null;
 }
 
 async function loadMissions() {
@@ -150,7 +240,10 @@ async function loadMissions() {
     const typeLabel = MISSION_TYPE_LABELS[m.mission_type] || m.mission_type;
     tr.innerHTML = `
       <td>${m.name}</td>
+      <td>${m.rank || "D"}</td>
       <td>${typeLabel}${m.mission_type === "arco" && m.arco_id ? ` (${m.arco_id})` : ""}</td>
+      <td>${m.village_id ? villageLabel(m.village_id) : "—"}</td>
+      <td>${m.giver_npc_id ? npcLabel(m.giver_npc_id) || "—" : "—"}</td>
       <td>${formatLevelRequirement(m.level_min, m.level_max)}</td>
       <td>${m.xp ?? 0}</td>
       <td>${m.ryo ?? 0}</td>
@@ -183,42 +276,10 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   errorEl.textContent = "";
 
-  const mode = levelModeInput.value;
-  const minVal = levelMinInput.value === "" ? null : Number(levelMinInput.value);
-  const maxVal = levelMaxInput.value === "" ? null : Number(levelMaxInput.value);
-
-  let level_min = null;
-  let level_max = null;
-  if (mode === "exact") {
-    level_min = minVal;
-    level_max = minVal;
-  } else if (mode === "min") {
-    level_min = minVal;
-  } else if (mode === "max") {
-    level_max = maxVal;
-  } else if (mode === "range") {
-    level_min = minVal;
-    level_max = maxVal;
-  }
-
-  const payload = {
-    name: nameInput.value.trim(),
-    description: descInput.value.trim() || null,
-    mission_type: typeInput.value,
-    arco_id: typeInput.value === "arco" ? arcoInput.value : null,
-    xp: Number(xpInput.value) || 0,
-    ryo: Number(ryoInput.value) || 0,
-    level_min,
-    level_max,
-    objectives: getObjectivesFromForm(),
-  };
-
-  if (!payload.name) {
-    errorEl.textContent = "Informe o nome da missão.";
-    return;
-  }
-  if (payload.mission_type === "arco" && !payload.arco_id) {
-    errorEl.textContent = "Selecione o arco dessa missão.";
+  const payload = buildPayloadFromForm();
+  const validationError = validatePayload(payload);
+  if (validationError) {
+    errorEl.textContent = validationError;
     return;
   }
 
@@ -236,8 +297,34 @@ form.addEventListener("submit", async (e) => {
   loadMissions();
 });
 
+// Salva os dados atuais do formulário como uma missão NOVA (insert),
+// sem mexer na que está sendo editada — útil pra criar a variante de
+// outra vila de uma missão diária: edite o nome/objetivos/vila e
+// clique aqui em vez de "Salvar".
+duplicateBtn.addEventListener("click", async () => {
+  errorEl.textContent = "";
+
+  const payload = buildPayloadFromForm();
+  const validationError = validatePayload(payload);
+  if (validationError) {
+    errorEl.textContent = validationError;
+    return;
+  }
+
+  const { error } = await supabase.from("missions").insert(payload);
+  if (error) {
+    errorEl.textContent = `Erro ao duplicar: ${error.message}`;
+    return;
+  }
+
+  resetForm();
+  loadMissions();
+});
+
 cancelBtn.addEventListener("click", resetForm);
 
 populateArcoSelect();
+populateVillageSelect();
+await loadNpcOptions();
 resetForm();
 loadMissions();

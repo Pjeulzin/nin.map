@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nin.Map — Mapa do Nin Online</title>
-  <meta name="description" content="Mapa interativo do mundo de Nin Online, feito com Leaflet." />
+  <title>Itens — Nin.Map</title>
+  <meta name="description" content="Catálogo de itens de Nin Online: anéis, armas, roupas, consumíveis e itens de mob." />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -21,7 +20,7 @@
     </div>
     <div id="panel-body" class="float-panel__body">
       <nav class="float-panel__nav">
-        <a href="index.html" class="float-panel__link float-panel__link--active">
+        <a href="index.html" class="float-panel__link">
           <span class="float-panel__icon" aria-hidden="true">🗺️</span>
           <span data-i18n="nav_map">Mapa</span>
         </a>
@@ -37,7 +36,7 @@
           <span class="float-panel__icon" aria-hidden="true">🧙</span>
           <span data-i18n="nav_npcs">NPCs</span>
         </a>
-        <a href="items.html" class="float-panel__link">
+        <a href="items.html" class="float-panel__link float-panel__link--active">
           <span class="float-panel__icon" aria-hidden="true">🎒</span>
           <span data-i18n="nav_items">Itens</span>
         </a>
@@ -62,13 +61,23 @@
       <div class="float-panel__divider"></div>
 
       <div class="float-panel__filters">
-        <label for="village-select" class="visually-hidden">Selecionar vila</label>
-        <select id="village-select" class="select" title="Selecionar vila">
-          <option value="" data-i18n="village_placeholder">Sua vila...</option>
+        <label for="search-items" class="visually-hidden">Pesquisar itens</label>
+        <input
+          type="search"
+          id="search-items"
+          class="select"
+          data-i18n-placeholder="search_items_placeholder"
+          placeholder="Pesquisar por nome..."
+        />
+        <label for="filter-type" class="visually-hidden">Filtrar por tipo</label>
+        <select id="filter-type" class="select" title="Filtrar por tipo">
+          <option value="" data-i18n="filter_all_types">Todos os tipos</option>
+          <option value="anel" data-i18n="item_type_anel">Anel</option>
+          <option value="arma" data-i18n="item_type_arma">Arma</option>
+          <option value="roupa" data-i18n="item_type_roupa">Roupa</option>
+          <option value="consumivel" data-i18n="item_type_consumivel">Consumível</option>
+          <option value="item_mob" data-i18n="item_type_item_mob">Item de mob</option>
         </select>
-        <label for="arco-select" class="visually-hidden">Selecionar arco</label>
-        <select id="arco-select" class="select" title="Selecionar arco"></select>
-        <button id="btn-reset-view" class="btn" data-i18n="btn_center" title="Centralizar mapa">Centralizar</button>
       </div>
 
       <div class="float-panel__divider"></div>
@@ -81,10 +90,27 @@
     </div>
   </div>
 
-  <main id="map"></main>
+  <main class="page">
+    <div id="items-status" class="status-message"></div>
+    <div class="admin-table-wrap" style="margin:0;">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th data-i18n="th_name">Nome</th>
+            <th data-i18n="th_type">Tipo</th>
+            <th data-i18n="th_description">Descrição</th>
+            <th data-i18n="th_dropped_by">Dropado por</th>
+            <th data-i18n="th_damage">Dano</th>
+            <th data-i18n="th_range">Alcance</th>
+          </tr>
+        </thead>
+        <tbody id="items-tbody"></tbody>
+      </table>
+    </div>
+  </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script type="module" src="js/nav.js"></script>
-  <script type="module" src="js/map.js"></script>
+  <script type="module" src="js/items.js"></script>
 </body>
 </html>

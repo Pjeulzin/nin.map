@@ -9,37 +9,96 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar__brand">
-      <span class="topbar__logo">🗺️</span>
-      <span class="topbar__title">Nin<span class="accent">.Map</span></span>
+  <div id="ninmap-panel" class="float-panel" data-minimized="false">
+    <div id="panel-header" class="float-panel__header">
+      <span class="float-panel__drag-icon" aria-hidden="true">⠿</span>
+      <span class="float-panel__brand">
+        <span class="topbar__logo">🗺️</span>
+        <span class="float-panel__title">Nin<span class="accent">.Map</span></span>
+      </span>
+      <button id="panel-toggle" type="button" class="float-panel__toggle" aria-expanded="true" title="Minimizar">–</button>
     </div>
-    <nav class="topbar__nav">
-      <a href="index.html" class="topbar__link">Mapa</a>
-      <a href="missions.html" class="topbar__link topbar__link--active">Missões</a>
-      <a href="admin/index.html" class="topbar__link">Admin</a>
-    </nav>
-    <div class="topbar__actions">
-      <label for="filter-type" class="visually-hidden">Filtrar por tipo</label>
-      <select id="filter-type" class="select" title="Filtrar por tipo">
-        <option value="">Todos os tipos</option>
-        <option value="global">Global</option>
-        <option value="arco">Exclusiva de arco</option>
-        <option value="evento">Evento</option>
-        <option value="diaria">Diária</option>
-      </select>
-      <label for="filter-arco" class="visually-hidden">Filtrar por arco</label>
-      <select id="filter-arco" class="select" title="Filtrar por arco">
-        <option value="">Todos os arcos</option>
-      </select>
+    <div id="panel-body" class="float-panel__body">
+      <nav class="float-panel__nav">
+        <a href="index.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🗺️</span>
+          <span data-i18n="nav_map">Mapa</span>
+        </a>
+        <a href="missions.html" class="float-panel__link float-panel__link--active">
+          <span class="float-panel__icon" aria-hidden="true">📜</span>
+          <span data-i18n="nav_missions">Missões</span>
+        </a>
+        <a href="mobs.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">👹</span>
+          <span data-i18n="nav_mobs">Mobs</span>
+        </a>
+        <a href="npcs.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🧙</span>
+          <span data-i18n="nav_npcs">NPCs</span>
+        </a>
+        <a href="items.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🎒</span>
+          <span data-i18n="nav_items">Itens</span>
+        </a>
+        <a href="masteries.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🌀</span>
+          <span data-i18n="nav_masteries">Maestrias</span>
+        </a>
+        <a href="jutsus.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🥷</span>
+          <span data-i18n="nav_jutsus">Jutsus</span>
+        </a>
+        <a href="builds.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🛠️</span>
+          <span data-i18n="nav_builds">Builds</span>
+        </a>
+      </nav>
+
+      <div class="float-panel__divider"></div>
+
+      <div id="global-controls" class="float-panel__controls"></div>
+
+      <div class="float-panel__divider"></div>
+
+      <div class="float-panel__filters">
+        <label for="filter-village" class="visually-hidden">Filtrar por vila</label>
+        <select id="filter-village" class="select" title="Filtrar por vila">
+          <option value="" data-i18n="filter_all_villages">Todas as vilas</option>
+        </select>
+        <label for="filter-type" class="visually-hidden">Filtrar por tipo</label>
+        <select id="filter-type" class="select" title="Filtrar por tipo">
+          <option value="" data-i18n="filter_all_types">Todos os tipos</option>
+          <option value="global" data-i18n="mission_type_global">Global</option>
+          <option value="arco" data-i18n="mission_type_arco">Exclusiva de arco</option>
+          <option value="evento" data-i18n="mission_type_evento">Evento</option>
+          <option value="diaria" data-i18n="mission_type_diaria">Diária</option>
+        </select>
+        <label for="filter-arco" class="visually-hidden">Filtrar por arco</label>
+        <select id="filter-arco" class="select" title="Filtrar por arco">
+          <option value="" data-i18n="filter_all_arcos">Todos os arcos</option>
+        </select>
+        <label for="filter-rank" class="visually-hidden">Filtrar por rank</label>
+        <select id="filter-rank" class="select" title="Filtrar por rank">
+          <option value="" data-i18n="filter_all_ranks">Todos os ranks</option>
+        </select>
+      </div>
+
+      <div class="float-panel__divider"></div>
+
+      <a href="admin/index.html" class="float-panel__admin-link">
+        <span aria-hidden="true">⚙️</span>
+        <span data-i18n="nav_admin">Admin</span>
+      </a>
+      <p class="float-panel__credit"><span data-i18n="footer_credit">Criado por</span> <strong>Pjeul</strong></p>
     </div>
-  </header>
+  </div>
 
   <main class="page">
     <div id="missions-status" class="status-message"></div>
     <div id="missions-list" class="missions-grid"></div>
   </main>
 
+  <script type="module" src="js/nav.js"></script>
   <script type="module" src="js/missions.js"></script>
 </body>
 </html>

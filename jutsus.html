@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nin.Map — Mapa do Nin Online</title>
-  <meta name="description" content="Mapa interativo do mundo de Nin Online, feito com Leaflet." />
+  <title>Jutsus — Nin.Map</title>
+  <meta name="description" content="Jutsus de Nin Online: maestria, rank, nível, custo de chakra e cooldown." />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -21,7 +20,7 @@
     </div>
     <div id="panel-body" class="float-panel__body">
       <nav class="float-panel__nav">
-        <a href="index.html" class="float-panel__link float-panel__link--active">
+        <a href="index.html" class="float-panel__link">
           <span class="float-panel__icon" aria-hidden="true">🗺️</span>
           <span data-i18n="nav_map">Mapa</span>
         </a>
@@ -45,7 +44,7 @@
           <span class="float-panel__icon" aria-hidden="true">🌀</span>
           <span data-i18n="nav_masteries">Maestrias</span>
         </a>
-        <a href="jutsus.html" class="float-panel__link">
+        <a href="jutsus.html" class="float-panel__link float-panel__link--active">
           <span class="float-panel__icon" aria-hidden="true">🥷</span>
           <span data-i18n="nav_jutsus">Jutsus</span>
         </a>
@@ -62,13 +61,14 @@
       <div class="float-panel__divider"></div>
 
       <div class="float-panel__filters">
-        <label for="village-select" class="visually-hidden">Selecionar vila</label>
-        <select id="village-select" class="select" title="Selecionar vila">
-          <option value="" data-i18n="village_placeholder">Sua vila...</option>
+        <label for="filter-mastery" class="visually-hidden">Filtrar por maestria</label>
+        <select id="filter-mastery" class="select" title="Filtrar por maestria">
+          <option value="" data-i18n="filter_all_masteries">Todas as maestrias</option>
         </select>
-        <label for="arco-select" class="visually-hidden">Selecionar arco</label>
-        <select id="arco-select" class="select" title="Selecionar arco"></select>
-        <button id="btn-reset-view" class="btn" data-i18n="btn_center" title="Centralizar mapa">Centralizar</button>
+        <label for="filter-rank" class="visually-hidden">Filtrar por rank</label>
+        <select id="filter-rank" class="select" title="Filtrar por rank">
+          <option value="" data-i18n="filter_all_ranks">Todos os ranks</option>
+        </select>
       </div>
 
       <div class="float-panel__divider"></div>
@@ -81,10 +81,12 @@
     </div>
   </div>
 
-  <main id="map"></main>
+  <main class="page">
+    <div id="jutsus-status" class="status-message"></div>
+    <div id="jutsus-list" class="missions-grid"></div>
+  </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script type="module" src="js/nav.js"></script>
-  <script type="module" src="js/map.js"></script>
+  <script type="module" src="js/jutsus.js"></script>
 </body>
 </html>

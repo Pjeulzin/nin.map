@@ -15,6 +15,12 @@
     <nav class="topbar__nav">
       <a href="pins.html" class="topbar__link">Pins</a>
       <a href="missions.html" class="topbar__link topbar__link--active">Missões</a>
+      <a href="mobs.html" class="topbar__link">Mobs</a>
+      <a href="npcs.html" class="topbar__link">NPCs</a>
+      <a href="items.html" class="topbar__link">Itens</a>
+      <a href="masteries.html" class="topbar__link">Maestrias</a>
+      <a href="jutsus.html" class="topbar__link">Jutsus</a>
+      <a href="../builds.html" class="topbar__link">Builds</a>
       <a href="../missions.html" class="topbar__link">Ver missões</a>
     </nav>
     <div class="topbar__actions">
@@ -52,7 +58,41 @@
             <label for="mission-arco">Arco</label>
             <select id="mission-arco"></select>
           </div>
+          <div class="form-field">
+            <label for="mission-rank">Rank</label>
+            <select id="mission-rank">
+              <option value="S">S</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D" selected>D</option>
+            </select>
+          </div>
         </div>
+
+        <div class="form-field">
+          <label for="mission-village">Vila (só se essa variante da missão for específica de uma vila)</label>
+          <select id="mission-village">
+            <option value="">Todas as vilas / não se aplica</option>
+          </select>
+        </div>
+        <p class="help-text">
+          Missões que pedem itens diferentes por vila (ex: "Medicine Supplies I")
+          viram uma linha por vila — mesmo nome, vila e objetivos diferentes.
+          Use "Duplicar para outra vila" depois de salvar pra não redigitar tudo.
+        </p>
+
+        <div class="form-field">
+          <label for="mission-npc">NPC que concede (opcional)</label>
+          <select id="mission-npc">
+            <option value="">— Não definido —</option>
+          </select>
+        </div>
+        <p class="help-text">
+          Precisa cadastrar o NPC primeiro em Admin → NPCs pra ele
+          aparecer aqui. Marcar o papel "Concede missão" no cadastro do
+          NPC é só organizativo — o vínculo de verdade é este campo.
+        </p>
 
         <div class="form-row">
           <div class="form-field">
@@ -93,8 +133,11 @@
 
         <p id="mission-error" class="error-text"></p>
 
-        <div style="display:flex; gap:8px; margin-top:8px;">
+        <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
           <button type="submit" class="btn-primary">Salvar</button>
+          <button type="button" id="btn-duplicate" class="btn" style="display:none;" title="Salva os dados atuais do formulário como uma missão nova, sem alterar a que está sendo editada">
+            Duplicar para outra vila
+          </button>
           <button type="button" id="btn-cancel-edit" class="btn" style="display:none;">Cancelar edição</button>
         </div>
       </form>
@@ -106,7 +149,10 @@
         <thead>
           <tr>
             <th>Nome</th>
+            <th>Rank</th>
             <th>Tipo</th>
+            <th>Vila</th>
+            <th>NPC</th>
             <th>Nível</th>
             <th>XP</th>
             <th>Ryo</th>

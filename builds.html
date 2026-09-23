@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Builds — Nin.Map</title>
+  <meta name="description" content="Monte a build do seu personagem de Nin Online: maestrias, arma, atributos, anéis e jutsus." />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="ninmap-panel" class="float-panel" data-minimized="false">
+    <div id="panel-header" class="float-panel__header">
+      <span class="float-panel__drag-icon" aria-hidden="true">⠿</span>
+      <span class="float-panel__brand">
+        <span class="topbar__logo">🗺️</span>
+        <span class="float-panel__title">Nin<span class="accent">.Map</span></span>
+      </span>
+      <button id="panel-toggle" type="button" class="float-panel__toggle" aria-expanded="true" title="Minimizar">–</button>
+    </div>
+    <div id="panel-body" class="float-panel__body">
+      <nav class="float-panel__nav">
+        <a href="index.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🗺️</span>
+          <span data-i18n="nav_map">Mapa</span>
+        </a>
+        <a href="missions.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">📜</span>
+          <span data-i18n="nav_missions">Missões</span>
+        </a>
+        <a href="mobs.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">👹</span>
+          <span data-i18n="nav_mobs">Mobs</span>
+        </a>
+        <a href="npcs.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🧙</span>
+          <span data-i18n="nav_npcs">NPCs</span>
+        </a>
+        <a href="items.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🎒</span>
+          <span data-i18n="nav_items">Itens</span>
+        </a>
+        <a href="masteries.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🌀</span>
+          <span data-i18n="nav_masteries">Maestrias</span>
+        </a>
+        <a href="jutsus.html" class="float-panel__link">
+          <span class="float-panel__icon" aria-hidden="true">🥷</span>
+          <span data-i18n="nav_jutsus">Jutsus</span>
+        </a>
+        <a href="builds.html" class="float-panel__link float-panel__link--active">
+          <span class="float-panel__icon" aria-hidden="true">🛠️</span>
+          <span data-i18n="nav_builds">Builds</span>
+        </a>
+      </nav>
+
+      <div class="float-panel__divider"></div>
+
+      <div id="global-controls" class="float-panel__controls"></div>
+
+      <div class="float-panel__divider"></div>
+
+      <a href="admin/index.html" class="float-panel__admin-link">
+        <span aria-hidden="true">⚙️</span>
+        <span data-i18n="nav_admin">Admin</span>
+      </a>
+      <p class="float-panel__credit"><span data-i18n="footer_credit">Criado por</span> <strong>Pjeul</strong></p>
+    </div>
+  </div>
+
+  <main class="page build-page">
+    <h1 data-i18n="builds_title">Monte seu personagem</h1>
+    <p class="status-message" data-i18n="builds_subtitle">
+      Escolha maestrias, arma, distribua pontos de atributo e veja os jutsus disponíveis — mesma lógica do NinForge.
+    </p>
+    <div id="builds-status" class="status-message"></div>
+
+    <div id="builds-app" class="build-layout" style="display: none;">
+      <!-- Coluna esquerda: formulário -->
+      <div>
+        <section class="build-section">
+          <h2><span class="build-section__bar"></span><span data-i18n="builds_customization">Personalização</span></h2>
+
+          <div class="form-field">
+            <label for="b-name" data-i18n="builds_character_name">Nome do personagem</label>
+            <input type="text" id="b-name" value="Meu Ninja" maxlength="40" />
+          </div>
+
+          <div class="build-grid-2">
+            <div class="form-field">
+              <label for="b-level" data-i18n="builds_level">Nível</label>
+              <input type="number" id="b-level" min="1" max="70" value="70" />
+            </div>
+            <div class="form-field">
+              <label for="b-village" data-i18n="builds_village">Vila</label>
+              <select id="b-village" class="select">
+                <option value="" data-i18n="builds_village_none">Nenhuma</option>
+                <option value="folha">Folha</option>
+                <option value="areia">Areia</option>
+                <option value="neblina">Névoa</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="build-grid-2">
+            <div class="form-field">
+              <label for="b-mastery1" data-i18n="builds_mastery_1">1ª Maestria</label>
+              <select id="b-mastery1" class="select"></select>
+            </div>
+            <div class="form-field">
+              <label for="b-mastery2" data-i18n="builds_mastery_2">2ª Maestria</label>
+              <select id="b-mastery2" class="select"></select>
+            </div>
+          </div>
+
+          <div class="build-grid-2">
+            <div class="form-field">
+              <label for="b-corp" data-i18n="builds_corporation">Corporação</label>
+              <select id="b-corp" class="select">
+                <option value="" data-i18n="builds_corporation_freelance">Freelance</option>
+                <option value="ANBU">ANBU</option>
+                <option value="Twelve Fangs">Twelve Fangs</option>
+                <option value="Kuronami">Kuronami</option>
+                <option value="Puppeteer Squad">Puppeteer Squad</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="b-guildbuff">
+                <span data-i18n="builds_guild_buff">Buff de guild</span>
+                (<span id="b-guildbuff-value">0</span>%)
+              </label>
+              <input type="range" id="b-guildbuff" min="0" max="20" value="0" />
+            </div>
+          </div>
+
+          <button type="button" id="b-reset" class="btn btn-small" data-i18n="builds_reset">Redefinir personalização</button>
+        </section>
+
+        <section class="build-section">
+          <h2><span class="build-section__bar"></span><span data-i18n="builds_weapon">Arma</span></h2>
+          <div class="build-grid-2">
+            <div class="form-field">
+              <label for="b-weapon-group" data-i18n="builds_weapon_group">Categoria</label>
+              <select id="b-weapon-group" class="select">
+                <option value="" data-i18n="builds_weapon_group_none">Nenhuma</option>
+                <option value="Blunt">Blunt</option>
+                <option value="Fan">Fan</option>
+                <option value="Fist">Fist</option>
+                <option value="Pipe">Pipe</option>
+                <option value="Seven Blades">Seven Blades</option>
+                <option value="Sword">Sword</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="b-weapon-model" data-i18n="builds_weapon_model">Modelo</label>
+              <select id="b-weapon-model" class="select">
+                <option value="" data-i18n="builds_weapon_model_none">Nenhum (desarmado)</option>
+              </select>
+            </div>
+          </div>
+          <div id="b-weapon-details"></div>
+        </section>
+
+        <section class="build-section">
+          <h2><span class="build-section__bar"></span><span data-i18n="builds_status">Status</span></h2>
+          <p class="build-points-left">
+            <span data-i18n="builds_unallocated">Pontos livres</span>: <strong id="b-points-left">0</strong>
+          </p>
+          <div id="b-stats"></div>
+          <div class="build-vitals" style="margin-top: 14px;">
+            <div class="build-vitals__box">
+              <strong id="b-hp">0</strong>
+              <span data-i18n="builds_health">Vida</span>
+            </div>
+            <div class="build-vitals__box">
+              <strong id="b-chakra">0</strong>
+              <span data-i18n="builds_chakra">Chakra</span>
+            </div>
+            <div class="build-vitals__box">
+              <strong id="b-autoatk">0</strong>
+              <span data-i18n="builds_auto_atk">Ataque básico</span>
+            </div>
+          </div>
+          <div class="build-grid-3">
+            <div class="build-vitals__box">
+              <strong id="b-kunai">0</strong>
+              <span data-i18n="builds_kunai">Kunai</span>
+            </div>
+            <div class="build-vitals__box">
+              <strong id="b-shuriken">0</strong>
+              <span data-i18n="builds_shuriken">Shuriken</span>
+            </div>
+            <div class="build-vitals__box">
+              <strong id="b-senbon">0</strong>
+              <span data-i18n="builds_senbon">Senbon</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="build-section">
+          <h2><span class="build-section__bar"></span><span data-i18n="builds_rings">Anéis</span></h2>
+          <div class="build-rings">
+            <div class="build-ring">
+              <h3 data-i18n="builds_ring_alpha">Anel Alfa</h3>
+              <div id="b-ring1"></div>
+            </div>
+            <div class="build-ring">
+              <h3 data-i18n="builds_ring_beta">Anel Beta</h3>
+              <div id="b-ring2"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="build-section">
+          <h2><span class="build-section__bar"></span><span data-i18n="builds_jutsus">Jutsus</span></h2>
+          <div id="b-jutsu-tabs" class="build-jutsu-mastery-tabs"></div>
+          <div id="b-jutsu-grid" class="build-jutsu-grid"></div>
+        </section>
+      </div>
+
+      <!-- Coluna direita: resumo + ações -->
+      <div>
+        <div class="build-summary">
+          <h2 style="margin:0 0 12px; font-size:0.95rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted);" data-i18n="builds_summary">Meu ninja</h2>
+          <dl style="margin:0;">
+            <div class="build-summary__row">
+              <dt data-i18n="builds_level">Nível</dt>
+              <dd id="s-level">70</dd>
+            </div>
+            <div class="build-summary__row">
+              <dt data-i18n="builds_village">Vila</dt>
+              <dd id="s-village">—</dd>
+            </div>
+            <div class="build-summary__row">
+              <dt data-i18n="builds_corporation">Corporação</dt>
+              <dd id="s-corp">—</dd>
+            </div>
+            <div class="build-summary__row">
+              <dt data-i18n="builds_mastery_path">Maestrias</dt>
+              <dd id="s-masteries">—</dd>
+            </div>
+          </dl>
+
+          <h3 style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; margin: 16px 0 6px;" data-i18n="builds_status">Status</h3>
+          <dl style="margin:0;" id="s-stats"></dl>
+
+          <h3 style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; margin: 16px 0 6px;" data-i18n="builds_specifications">Especificações</h3>
+          <dl style="margin:0;">
+            <div class="build-summary__row">
+              <dt data-i18n="builds_weapon">Arma</dt>
+              <dd id="s-weapon">—</dd>
+            </div>
+            <div class="build-summary__row">
+              <dt data-i18n="builds_ring_alpha">Anel Alfa</dt>
+              <dd id="s-ring1">—</dd>
+            </div>
+            <div class="build-summary__row">
+              <dt data-i18n="builds_ring_beta">Anel Beta</dt>
+              <dd id="s-ring2">—</dd>
+            </div>
+          </dl>
+
+          <div class="build-actions">
+            <button type="button" id="b-save" class="btn btn-primary" data-i18n="builds_save_build">Salvar build</button>
+            <button type="button" id="b-share" class="btn" data-i18n="builds_share_build">Compartilhar build</button>
+          </div>
+          <div id="b-share-box" class="build-share-box" style="display: none;">
+            <input type="text" id="b-share-link" readonly />
+          </div>
+        </div>
+
+        <section class="build-section" style="margin-top: 16px;">
+          <h2><span class="build-section__bar"></span><span data-i18n="builds_saved_builds">Builds salvos</span></h2>
+          <div id="b-saved-list" class="build-saved-grid"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="js/nav.js"></script>
+  <script type="module" src="js/builds.js"></script>
+</body>
+</html>

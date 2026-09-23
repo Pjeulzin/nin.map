@@ -12,8 +12,11 @@
  * cai de volta nos `locations` definidos em cada arco no config.js.
  */
 
-import { ARCOS, DEFAULT_ARCO_ID } from "./config.js";
+import { ARCOS, DEFAULT_ARCO_ID, VILLAGES } from "./config.js";
 import { supabase, isSupabaseConfigured } from "./supabaseClient.js";
+import { getCurrentVillage, storeVillage, updateVillageInUrl } from "./village.js";
+import { mountGlobalControls } from "./chrome.js";
+import { applyStaticTranslations, pickLabel } from "./i18n.js";
 
 const markerIcons = {
   cidade: "🏘️",
@@ -138,14 +141,50 @@ function populateArcoSelect() {
   ARCOS.forEach((arco) => {
     const option = document.createElement("option");
     option.value = arco.id;
-    option.textContent = arco.label;
+    option.textContent = pickLabel(arco);
     select.appendChild(option);
   });
   select.addEventListener("change", (e) => loadArco(e.target.value));
 }
 
+function populateVillageSelect() {
+  const select = document.getElementById("village-select");
+  VILLAGES.forEach((village) => {
+    const option = document.createElement("option");
+    option.value = village.id;
+    option.textContent = pickLabel(village);
+    select.appendChild(option);
+  });
+
+  const current = getCurrentVillage();
+  if (current) select.value = current;
+
+  select.addEventListener("change", (e) => {
+    storeVillage(e.target.value || null);
+    updateVillageInUrl(e.target.value || null);
+  });
+}
+
+function refreshArcoAndVillageLabels() {
+  const arcoSelect = document.getElementById("arco-select");
+  Array.from(arcoSelect.options).forEach((opt) => {
+    opt.textContent = pickLabel(getArcoById(opt.value));
+  });
+
+  const villageSelect = document.getElementById("village-select");
+  Array.from(villageSelect.options).forEach((opt) => {
+    if (!opt.value) return; // deixa o placeholder (data-i18n) em paz
+    const village = VILLAGES.find((v) => v.id === opt.value);
+    if (village) opt.textContent = pickLabel(village);
+  });
+}
+
 function init() {
+  mountGlobalControls();
+  applyStaticTranslations();
+
   populateArcoSelect();
+  populateVillageSelect();
 
   const initialId = getArcoFromUrl() || getStoredArco() || DEFAULT_ARCO_ID;
   loadArco(getArcoById(initialId).id);
@@ -163,6 +202,8 @@ function init() {
       "Supabase não configurado ainda — edite js/supabase-config.js com a URL e a anon key do seu projeto."
     );
   }
+
+  window.addEventListener("ninmap:langchange", refreshArcoAndVillageLabels);
 }
 
 init();

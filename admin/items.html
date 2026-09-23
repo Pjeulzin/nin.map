@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Itens — Nin.Map</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="admin-body" style="display:flex; flex-direction:column;">
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__logo">🗺️</span>
+      <span class="topbar__title">Nin<span class="accent">.Map</span></span>
+    </div>
+    <nav class="topbar__nav">
+      <a href="pins.html" class="topbar__link">Pins</a>
+      <a href="missions.html" class="topbar__link">Missões</a>
+      <a href="mobs.html" class="topbar__link">Mobs</a>
+      <a href="npcs.html" class="topbar__link">NPCs</a>
+      <a href="items.html" class="topbar__link topbar__link--active">Itens</a>
+      <a href="masteries.html" class="topbar__link">Maestrias</a>
+      <a href="jutsus.html" class="topbar__link">Jutsus</a>
+      <a href="../builds.html" class="topbar__link">Builds</a>
+      <a href="../items.html" class="topbar__link">Ver itens</a>
+    </nav>
+    <div class="topbar__actions">
+      <button id="btn-logout" class="btn">Sair</button>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <div class="admin-form-card">
+      <h2 id="form-title">Novo item</h2>
+      <form id="item-form">
+        <input type="hidden" id="item-id" />
+
+        <div class="form-field">
+          <label for="item-name">Nome</label>
+          <input type="text" id="item-name" required />
+        </div>
+
+        <div class="form-field">
+          <label for="item-type">Tipo</label>
+          <select id="item-type">
+            <option value="anel">Anel</option>
+            <option value="arma">Arma</option>
+            <option value="roupa">Roupa</option>
+            <option value="consumivel">Consumível</option>
+            <option value="item_mob" selected>Item de mob</option>
+          </select>
+        </div>
+
+        <div id="weapon-fields" style="display:none;">
+          <p class="help-text" style="margin-top:0;">
+            Campos extras, só usados quando o tipo é "Arma" — usados
+            pelo calculador de build (<a href="../builds.html">builds.html</a>).
+          </p>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="item-weapon-group">Grupo de arma</label>
+              <select id="item-weapon-group">
+                <option value="">— Não definido —</option>
+                <option value="Blunt">Blunt</option>
+                <option value="Fan">Fan</option>
+                <option value="Fist">Fist</option>
+                <option value="Pipe">Pipe</option>
+                <option value="Seven Blades">Seven Blades</option>
+                <option value="Sword">Sword</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="item-weapon-rarity">Raridade</label>
+              <input type="text" id="item-weapon-rarity" placeholder="Common, Rare, Legendary..." />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="item-base-damage">Dano base (Base Damage)</label>
+              <input type="number" id="item-base-damage" min="0" />
+            </div>
+            <div class="form-field">
+              <label for="item-attack-range">Alcance (Range)</label>
+              <input type="number" id="item-attack-range" min="0" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label>
+              <input type="checkbox" id="item-weapon-agi-scaling" style="width:auto; margin-right:6px;" />
+              Auto ataque escala com Agilidade (em vez de Força)
+            </label>
+          </div>
+          <div class="form-field">
+            <label for="item-weapon-requirements">Requisitos (JSON) — ex: {"Level": 10, "Strength": 23}</label>
+            <textarea id="item-weapon-requirements" rows="2" placeholder="{}"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="item-weapon-buffs">Bônus (JSON) — ex: {"Fortitude": "+3", "Bonus": "Knockback"}</label>
+            <textarea id="item-weapon-buffs" rows="2" placeholder="{}"></textarea>
+          </div>
+          <p class="help-text">
+            Campos abaixo (categoria antiga / sinergia de maestria)
+            ficam mantidos por compatibilidade, mas não são mais
+            usados pelo calculador de build.
+          </p>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="item-weapon-category">Categoria da arma (antiga)</label>
+              <select id="item-weapon-category">
+                <option value="">— Não definida —</option>
+                <option value="espada">Espada</option>
+                <option value="kunai">Kunai</option>
+                <option value="shuriken">Shuriken</option>
+                <option value="bastao">Bastão</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="item-weapon-mastery">Sinergia de maestria (antiga)</label>
+              <select id="item-weapon-mastery">
+                <option value="">— Não definida —</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="item-description">Descrição</label>
+          <textarea id="item-description"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label>Imagem do item</label>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="item-icon-frame item-icon-frame--lg" id="item-image-preview">
+              <span class="item-icon-frame__empty">Sem imagem</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <input type="file" id="item-image" accept="image/png, image/jpeg, image/webp, image/gif" />
+              <button type="button" id="btn-remove-image" class="btn btn-small" style="display:none; align-self:flex-start;">Remover imagem</button>
+            </div>
+          </div>
+          <p class="help-text">PNG, JPG, WEBP ou GIF. Fica melhor em imagens quadradas, estilo ícone de inventário.</p>
+        </div>
+
+        <p id="item-error" class="error-text"></p>
+
+        <div style="display:flex; gap:8px;">
+          <button type="submit" class="btn-primary">Salvar</button>
+          <button type="button" id="btn-cancel-edit" class="btn" style="display:none;">Cancelar edição</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="admin-table-wrap">
+      <div id="items-status" class="status-message"></div>
+      <label for="items-type-filter" class="visually-hidden">Filtrar por tipo</label>
+      <select id="items-type-filter" class="select" style="margin-bottom:10px;">
+        <option value="">Todos os tipos</option>
+        <option value="anel">Anel</option>
+        <option value="arma">Arma</option>
+        <option value="roupa">Roupa</option>
+        <option value="consumivel">Consumível</option>
+        <option value="item_mob">Item de mob</option>
+      </select>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="items-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module" src="js/items-admin.js"></script>
+</body>
+</html>
